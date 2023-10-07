@@ -4,6 +4,7 @@ from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
 from linebot.models import MessageEvent, TextMessage, TextSendMessage
 from dotenv import load_dotenv
+from chat import chat_completion
 
 load_dotenv()
 
@@ -41,12 +42,14 @@ def callback():
 
     return "OK"
 
-
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
+    reply_message = chat_completion(event.message.text)
     text = event.message.text
     
-    line_bot_api.reply_message(event.reply_token, TextSendMessage(text=text))
+    line_bot_api.reply_message(event.reply_token, TextSendMessage(text=reply_message))
+
+
 
 
 if __name__ == "__main__":
